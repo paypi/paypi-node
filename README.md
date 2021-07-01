@@ -1,4 +1,4 @@
-# paypi-js
+# PayPI Node
 
 PayPI makes API creators' lives easier by handling API keys, user accounts, payments and more.
 API users have one account to access all APIs using PayPI.
