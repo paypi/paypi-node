@@ -1,4 +1,5 @@
 import PayPI from '../src/index';
+import { GraphQLError } from '../src/errors';
 import { GraphQLClient } from 'graphql-request';
 
 function generateMockClient(response: any) {
@@ -13,34 +14,181 @@ function generateMockClient(response: any) {
   return new GQLClient('123');
 }
 
-test('checks authed auth response', async () => {
+async function fetchUser(isAuthed: boolean = true) {
   let s = new PayPI('123123');
   s._client = generateMockClient({
-    response: {
-      data: {
-        checkSubscriberSecret: {
-          isAuthed: true,
-        },
-      },
+    checkSubscriberSecret: {
+      isAuthed: isAuthed,
     },
     variables: {},
   });
-  const k = await s.authenticate('1234');
+
+  return await s.authenticate('1234');
+}
+
+test('with authed auth response', async () => {
+  const k = await fetchUser(true);
   expect(k.isAuthed).toBe(true);
 });
 
-test('checks unauthed auth response', async () => {
+test('with unauthed auth response', async () => {
+  const k = await fetchUser(false);
+  expect(k.isAuthed).toBe(false);
+});
+
+test('with error auth response', async () => {
   let s = new PayPI('123123');
   s._client = generateMockClient({
     response: {
       data: {
-        checkSubscriberSecret: {
-          isAuthed: false,
-        },
+        checkSubscriberSecret: null,
       },
+      errors: [
+        {
+          message:
+            'ErrUnauthorized: User does not have authorization for this action',
+          path: ['checkSubscriberSecret'],
+          extensions: {
+            helpText: 'User not allowed to perform this action',
+            message: 'User does not have authorization for this action',
+            title: 'User not authorized',
+            type: 'ErrUnauthorized',
+          },
+        },
+      ],
     },
     variables: {},
   });
-  const k = await s.authenticate('1234');
-  expect(k.isAuthed).toBe(false);
+  await expect(s.authenticate('1234')).rejects.toThrow(GraphQLError);
+
+  try {
+    await s.authenticate('1234');
+  } catch (err) {
+    expect(err.message).toBe('User not allowed to perform this action');
+    expect(err.type).toBe('ErrUnauthorized');
+  }
+});
+
+test('with simple error auth response', async () => {
+  let s = new PayPI('123123');
+  s._client = generateMockClient({
+    response: {
+      data: {
+        checkSubscriberSecret: null,
+      },
+      errors: [
+        {
+          message:
+            'ErrUnauthorized: User does not have authorization for this action',
+          path: ['checkSubscriberSecret'],
+          extensions: {
+            message: 'User does not have authorization for this action',
+            type: 'ErrUnauthorized',
+          },
+        },
+      ],
+    },
+    variables: {},
+  });
+  await expect(s.authenticate('1234')).rejects.toThrow(GraphQLError);
+
+  try {
+    await s.authenticate('1234');
+  } catch (err) {
+    expect(err.message).toBe(
+      'User does not have authorization for this action'
+    );
+    expect(err.type).toBe('ErrUnauthorized');
+  }
+});
+
+test('with no extension error response', async () => {
+  let s = new PayPI('123123');
+  s._client = generateMockClient({
+    response: {
+      data: {
+        checkSubscriberSecret: null,
+      },
+      errors: [
+        {
+          message:
+            'ErrUnauthorized: User does not have authorization for this action',
+          path: ['checkSubscriberSecret'],
+        },
+      ],
+    },
+    variables: {},
+  });
+  await expect(s.authenticate('1234')).rejects.toThrow(GraphQLError);
+
+  try {
+    await s.authenticate('1234');
+  } catch (err) {
+    expect(err.message).toBe(
+      'ErrUnauthorized: User does not have authorization for this action'
+    );
+  }
+});
+
+it('should return true on success', async () => {
+  let user = await fetchUser(true);
+
+  user.paypi._client = generateMockClient({
+    makeCharge: {
+      success: true,
+    },
+    variables: {},
+  });
+
+  await expect(user.makeCharge('1234')).resolves.toBe(true);
+});
+
+it('should throw on non-success response', async () => {
+  let user = await fetchUser(true);
+
+  user.paypi._client = generateMockClient({
+    makeCharge: {
+      success: false,
+    },
+    variables: {},
+  });
+
+  try {
+    await user.makeCharge('1234');
+  } catch (err) {
+    expect(err.name).toBe('PaymentError');
+  }
+});
+
+it('should throw on server error', async () => {
+  let user = await fetchUser(true);
+
+  user.paypi._client = generateMockClient({
+    response: {
+      data: {
+        makeCharge: null,
+      },
+      errors: [
+        {
+          message:
+            'ErrUnauthorized: User does not have authorization for this action',
+          path: ['checkSubscriberSecret'],
+          extensions: {
+            helpText: 'User not allowed to perform this action',
+            message: 'User does not have authorization for this action',
+            title: 'User not authorized',
+            type: 'ErrUnauthorized',
+          },
+        },
+      ],
+    },
+    variables: {},
+  });
+
+  try {
+    await user.makeCharge('1234');
+  } catch (err) {
+    expect(err.message).toBe('User not allowed to perform this action');
+    expect(err.type).toBe('ErrUnauthorized');
+  }
 });
