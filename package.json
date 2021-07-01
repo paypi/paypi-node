@@ -1,7 +1,7 @@
 {
-  "name": "paypi-node",
-  "version": "1.0.0",
-  "description": "",
+  "name": "paypi",
+  "version": "1.0.1",
+  "description": "The offical PayPI node library gives access to the PayPI API from nodejs environments.",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "files": [
