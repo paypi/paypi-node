@@ -5,7 +5,7 @@ API users have one account to access all APIs using PayPI.
 
 We worry about API authentication and payments so you can focus on making awesome APIs!
 
-[More info @ paypi.dev](paypi.dev)
+[More info @ paypi.dev](https://paypi.dev)
 # Setup
 Install paypi from npm or yarn:
 ```node
