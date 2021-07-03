@@ -192,3 +192,11 @@ it('should throw on server error', async () => {
     expect(err.type).toBe('ErrUnauthorized');
   }
 });
+
+it('accepts given host configs', async () => {
+  const host = 'https://newhost.com';
+  const port = '123';
+  const basePath = '/test';
+  let s = new PayPI('123123', { host: host, port: port, basePath: basePath });
+  expect(s._connectionString).toBe(`${host}:${port}${basePath}`);
+});
