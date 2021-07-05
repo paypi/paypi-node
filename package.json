@@ -1,6 +1,6 @@
 {
   "name": "paypi",
-  "version": "1.1.0",
+  "version": "1.2.0",
   "description": "The offical PayPI node library gives access to the PayPI API from nodejs environments.",
   "main": "dist/cjs/index.js",
   "module": "dist/esm/index.js",
