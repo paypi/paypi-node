@@ -3,7 +3,7 @@ import { GraphQLError } from './errors';
 import User from './user';
 
 const DEFAULT_HOST = 'https://api.paypi.dev';
-const DEFAULT_PORT = '80';
+const DEFAULT_PORT = '443';
 const DEFAULT_BASE_PATH = '/graphql';
 
 type Config = {
