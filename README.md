@@ -33,7 +33,6 @@
 ## Table of Contents
 
 * [About the Project](#about-the-project)
-  * [Built With](#built-with)
 * [Getting Started](#getting-started)
   * [Prerequisites](#prerequisites)
   * [Installation](#installation)
@@ -130,7 +129,7 @@ All rights reserved.
 <!-- CONTACT -->
 ## Contact
 
-Alex - alex@paypi.dev
+Alex - alex@paypi.dev  
 Tom - tom@paypi.dev
 
 Project Link: [https://github.com/Paypi/paypi-node](https://github.com/Paypi/paypi-node)
