@@ -151,5 +151,5 @@ Project Link: [https://github.com/paypi/paypi-node](https://github.com/paypi/pay
 [issues-shield]: https://img.shields.io/github/issues/Paypi/paypi-node.svg?style=flat-square
 [issues-url]: https://github.com/paypi/paypi-node/issues
 [license-shield]: https://img.shields.io/github/license/Paypi/paypi-node.svg?style=flat-square
-[license-url]: https://github.com/paypi/paypi-node/blob/master/LICENSE.txt
+[license-url]: https://github.com/paypi/paypi-node/blob/master/LICENSE
 [product-screenshot]: images/product.png
