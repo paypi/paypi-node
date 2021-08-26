@@ -1,3 +1,3 @@
 import PayPI from './paypi';
 
-export default PayPI;
+export = PayPI;

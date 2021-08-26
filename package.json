@@ -1,15 +1,14 @@
 {
   "name": "paypi",
-  "version": "1.4.0",
+  "version": "2.0.0",
   "description": "The offical PayPI node library gives access to the PayPI API from nodejs environments.",
   "main": "dist/cjs/index.js",
-  "module": "dist/esm/index.js",
   "types": "dist/index.d.ts",
   "files": [
     "/dist"
   ],
   "scripts": {
-    "build": "tsc -p tsconfig.json && tsc -p tsconfig-cjs.json",
+    "build": "tsc -p tsconfig-cjs.json",
     "prepublish": "yarn-or-npm run build",
     "test": "jest"
   },
