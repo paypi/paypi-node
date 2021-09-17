@@ -193,6 +193,34 @@ it('should throw on server error', async () => {
   }
 });
 
+it('should throw on blank subscriber secret given', async () => {
+  let s = new PayPI('123123');
+  s._client = generateMockClient({
+    checkSubscriberSecret: {
+      isAuthed: false,
+    },
+    variables: {},
+  });
+
+  try {
+    await s.authenticate('');
+  } catch (err) {
+    expect(err.message).toBe(
+      'Subscription secret not given, please provide a subscription secret.'
+    );
+  }
+});
+
+it('should throw on blank API secret', async () => {
+  try {
+    let s = new PayPI('a');
+  } catch (err) {
+    expect(err.message).toBe(
+      'API secret not given, please set your API secret and try again.'
+    );
+  }
+});
+
 it('accepts given host configs', async () => {
   const host = 'https://newhost.com';
   const port = '123';

@@ -50,6 +50,17 @@ class PayPI {
       }
     `;
 
+    if (!subscriberSecret) {
+      throw new Error(
+        `Subscription secret not given, please provide a subscription secret.`
+      );
+    }
+    if (!this._key) {
+      throw new Error(
+        `API secret not given, please set your API secret and try again.`
+      );
+    }
+
     const variables = {
       serviceSecret: this._key,
       subSecret: subscriberSecret,
